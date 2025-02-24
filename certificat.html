@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificat Royal de Réussite</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Great+Vibes&display=swap');
+        
+        :root {
+            --royal-purple: #5a1894;
+            --royal-gold: #ffd700;
+            --royal-red: #a00;
+        }
+        
+        body {
+            font-family: 'Playfair Display', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            background-image: repeating-linear-gradient(45deg, #e8e8e8 0px, #e8e8e8 20px, #f0f0f0 20px, #f0f0f0 40px);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+        
+        .crown {
+            position: absolute;
+            top: 20px;
+            font-size: 80px;
+            color: var(--royal-gold);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: float 3s ease-in-out infinite;
+            z-index: 1;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        
+        .royal-container {
+            position: relative;
+            background: linear-gradient(135deg, #fff, #f9f9f9);
+            border: 8px solid var(--royal-gold);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3), 
+                        inset 0 0 30px rgba(255,215,0,0.2);
+            padding: 40px;
+            margin: 20px;
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+        
+        .royal-container::before, .royal-container::after {
+            content: "★";
+            position: absolute;
+            font-size: 40px;
+            color: var(--royal-gold);
+            top: -20px;
+        }
+        
+        .royal-container::before {
+            left: -20px;
+        }
+        
+        .royal-container::after {
+            right: -20px;
+        }
+        
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: var(--royal-purple);
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0 var(--royal-gold);
+            letter-spacing: 2px;
+            transform: rotate(-1deg);
+        }
+        
+        h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--royal-red);
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 30px;
+            transform: rotate(1deg);
+        }
+        
+        p {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        
+        .signature {
+            font-family: 'Great Vibes', cursive;
+            font-size: 32px;
+            color: var(--royal-purple);
+            margin: 20px 0;
+        }
+        
+        .royal-button {
+            background: linear-gradient(135deg, var(--royal-gold), #e5b800);
+            color: var(--royal-purple);
+            border: 3px solid var(--royal-purple);
+            font-family: 'Cinzel', serif;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 15px 40px;
+            cursor: pointer;
+            border-radius: 50px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            margin: 20px 0;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .royal-button:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        
+        .royal-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .royal-button::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255,255,255,0.2);
+            transform: rotate(45deg);
+            z-index: 1;
+            transition: all 0.6s;
+            opacity: 0;
+        }
+        
+        .royal-button:hover::before {
+            opacity: 1;
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+        
+        .quiz-container, .countdown-container, .congrats-container {
+            display: none;
+            margin-top: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 3px dashed var(--royal-gold);
+        }
+        
+        .quiz-question {
+            font-family: 'Cinzel', serif;
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--royal-purple);
+            font-weight: 700;
+        }
+        
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .quiz-option {
+            font-family: 'Playfair Display', serif;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quiz-option:hover {
+            background-color: #e5e5e5;
+            transform: translateX(5px);
+        }
+        
+        .quiz-option.selected {
+            background-color: var(--royal-gold);
+            color: var(--royal-purple);
+            border-color: var(--royal-purple);
+            font-weight: bold;
+        }
+        
+        .countdown-number {
+            font-family: 'Cinzel', serif;
+            font-size: 100px;
+            color: var(--royal-purple);
+            font-weight: 900;
+            text-shadow: 3px 3px 0 var(--royal-gold);
+            margin: 20px 0;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .congrats-message {
+            font-family: 'Great Vibes', cursive;
+            font-size: 42px;
+            color: var(--royal-purple);
+            margin-bottom: 20px;
+            animation: slideIn 1s forwards;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--royal-gold);
+            z-index: 999;
+            opacity: 0;
+        }
+        
+        .seal {
+            width: 100px;
+            height: 100px;
+            background-color: var(--royal-red);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+            color: var(--royal-gold);
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transform: rotate(-15deg);
+        }
+        
+        .ribbon {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+        }
+        
+        .ribbon::before {
+            content: "ROYAL";
+            position: absolute;
+            display: block;
+            width: 225px;
+            padding: 15px 0;
+            background-color: var(--royal-red);
+            color: white;
+            font-size: 17px;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            right: -25px;
+            top: 30px;
+            transform: rotate(45deg);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+        }
+        
+        .royal-decoration {
+            font-size: 24px;
+            color: var(--royal-gold);
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="crown">👑</div>
+    
+    <div class="royal-container">
+        <div class="ribbon"></div>
+        
+        <h1><i class="fas fa-crown" style="font-size: 0.8em; color: var(--royal-gold);"></i> Certification Royale</h1>
+        <h2>Titre Prestigieux en Attente</h2>
+        
+        <p><span class="royal-decoration">❧</span> Par la présente, nous attestons que vous êtes sur le point de recevoir un titre de la plus haute importance! <span class="royal-decoration">❧</span></p>
+        
+        <button id="startBtn" class="royal-button">Commencer la Cérémonie</button>
+        
+        <div id="quizContainer" class="quiz-container">
+            <div class="quiz-question">Pour prouver que vous êtes digne de ce titre, veuillez répondre à cette question cruciale:</div>
+            <div class="quiz-question">Quelle est la sauce royale par excellence?</div>
+            <div class="quiz-options">
+                <div class="quiz-option" data-correct="false">Sauce DogWater</div>
+                <div class="quiz-option" data-correct="false">Sauce Amitriptyline</div>
+                <div class="quiz-option" data-correct="true">Sauce Algérienne</div>
+                <div class="quiz-option" data-correct="false">Sauce FondDePoubelle</div>
+            </div>
+            <button id="validateQuizBtn" class="royal-button" disabled>Valider</button>
+        </div>
+        
+        <div id="countdownContainer" class="countdown-container">
+            <p>Préparation du certificat royal en cours...</p>
+            <div id="countdownNumber" class="countdown-number">3</div>
+        </div>
+        
+        <div id="congratsContainer" class="congrats-container">
+            <div class="congrats-message">Félicitations</div>
+            <p>Votre certificat officiel est maintenant prêt à être téléchargé!</p>
+            <div class="seal">SCEAU ROYAL</div>
+            <div class="signature">Par ordre du Roi</div>
+            <button id="downloadBtn" class="royal-button">Recevoir Votre Titre</button>
+        </div>
+    </div>
+
+    <script>
+    
+        function createConfetti() {
+            const colors = ['#FFD700', '#5a1894', '#a00', '#00a', '#0a0'];
+            const confettiCount = 200;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                
+                // Style aléatoire pour chaque confetti
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                confetti.style.opacity = Math.random() + 0.5;
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                // Animation pour chaque confetti
+                const animationDuration = Math.random() * 3 + 2;
+                confetti.style.animation = `fall ${animationDuration}s linear forwards`;
+                
+                // Keyframes pour l'animation de chute
+                const keyframes = `
+                    @keyframes fall {
+                        0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+                        100% { transform: translateY(100vh) rotate(${Math.random() * 720}deg); opacity: 0; }
+                    }
+                `;
+                
+                const style = document.createElement('style');
+                style.innerHTML = keyframes;
+                document.head.appendChild(style);
+                
+                document.body.appendChild(confetti);
+                
+                // Suppression des confettis après l'animation
+                setTimeout(() => {
+                    confetti.remove();
+                    style.remove();
+                }, animationDuration * 1000);
+            }
+        }
+        
+
+        document.getElementById('startBtn').addEventListener('click', function() {
+            this.style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'block';
+        });
+       
+        const quizOptions = document.querySelectorAll('.quiz-option');
+        const validateQuizBtn = document.getElementById('validateQuizBtn');
+        
+        quizOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Réinitialiser la sélection
+                quizOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                // Sélectionner l'option actuelle
+                this.classList.add('selected');
+                
+                // Activer le bouton de validation
+                validateQuizBtn.disabled = false;
+            });
+        });
+        
+        validateQuizBtn.addEventListener('click', function() {
+            const selectedOption = document.querySelector('.quiz-option.selected');
+            
+            if (selectedOption) {
+                const isCorrect = selectedOption.getAttribute('data-correct') === 'true';
+                
+                if (isCorrect) {
+                    // Passer au compte à rebours
+                    document.getElementById('quizContainer').style.display = 'none';
+                    document.getElementById('countdownContainer').style.display = 'block';
+                    
+                    // Lancer le compte à rebours
+                    let countdown = 3;
+                    const countdownElement = document.getElementById('countdownNumber');
+                    
+                    const countdownInterval = setInterval(() => {
+                        countdown--;
+                        countdownElement.textContent = countdown;
+                        
+                        if (countdown <= 0) {
+                            clearInterval(countdownInterval);
+                            
+                            // Passer aux félicitations
+                            document.getElementById('countdownContainer').style.display = 'none';
+                            document.getElementById('congratsContainer').style.display = 'block';
+                            
+                            // Faire tourner le conteneur
+                            document.querySelector('.royal-container').style.transform = 'rotateY(360deg)';
+                            
+                            // Lancer des confettis
+                            createConfetti();
+                        }
+                    }, 1000);
+                } else {
+                    // Mauvaise réponse, secouer le bouton
+                    this.classList.add('shake');
+                    setTimeout(() => {
+                        this.classList.remove('shake');
+                    }, 500);
+                    
+                    // Réinitialiser la sélection
+                    selectedOption.classList.remove('selected');
+                    this.disabled = true;
+                    
+                    // Message d'erreur
+                    alert('Un vrai connaisseur des tacos saurait la réponse! Essayez encore!');
+                }
+            }
+        });
+        
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+    
+    const pdfUrl = 'Certificat.pdf'; 
+
+
+    const a = document.createElement('a');
+    a.href = pdfUrl;
+    a.download = 'Certificat_Royal_de_Réussite.pdf'; 
+    document.body.appendChild(a);
+    a.click();
+
+    // Nettoyage
+    setTimeout(() => {
+        document.body.removeChild(a);
+        
+        // Relancer les confettis pour célébrer
+        createConfetti();
+        
+        // Animation du bouton
+        this.innerText = "GLOIRE À VOUS !";
+        this.style.backgroundColor = "#5a1894";
+        this.style.color = "#ffd700";
+        this.style.transform = "scale(1.1)";
+    }, 100);
+});
+
+    
+    </script>
+</body>
+</html>
